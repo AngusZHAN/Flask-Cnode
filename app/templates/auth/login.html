@@ -1,6 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <title>自由之翼</title>
@@ -52,58 +49,18 @@
         </div>
     </div>
     </div>
-    <div id="main">
-        <div id="sidebar">
-            <div class="panel">
-                <div class="inner">
-                    <a href="/topic/new" class="create_topic_btn">
-                        <span class="span-success">发布话题</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-        <div id="content">
-            <div class="panel">
-                <div class="header">
-                    <a href="/index" class="topic-tab current-tab">
-                    全部
-                </a> {% for b in bs %}
-                    <a href="/topic?board_id={{ b.id }}" class="topic-tab current-tab">
-                    {{ b.title }}
-                </a> {% endfor %}
-                </div>
-                <div class="inner post">
-                    <div class="topic_list">
-                        {% for t in ms %}
-                        <div class="cell">
-                            <div class="topic_title_wrapper">
-
-                                <a class="user_avatar pull-left">
-                                    <img src={{ '/uploads/' + t.user().user_image + '?v=3&amp;s=120' }} title="atian25" />
-                                </a>
-
-                                <a class="topic_title" href="">
-                                {{ t.title }}
-                            </a>
-                                <span>{{ t.replies() | count }} / {{ t.views }}</span>
-                                <a class="topic_title" href="">
-                                删除
-                            </a>
-
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="main" style="width:100%;text-align:center">
+        <h3 class="page-title">登录</h3>
+        {% from "_formhelpers.html" import render_field %}
+        <form method=post>
+            <dl>
+                {{ render_field(form.username) }} 
+                {{ render_field(form.password) }}
+            </dl>
+            <p><input type=submit value=登录></p>
+        </form>
     </div>
-    <script>
-        (function() {
-            var editor = new Editor();
-            editor.render($('.editor')[0]);
-        })();
-    </script>
+
 </body>
 
 </html>

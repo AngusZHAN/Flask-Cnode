@@ -9,6 +9,10 @@ from flask import (
     url_for, 
     request,
     )
+from .forms import (
+    RegisterForm,
+    LoginForm,
+)
 from flask_login import (
     login_required, 
     login_user, 
