@@ -8,9 +8,10 @@ from app import (
 	db,
 	)
 from app.models import (
-	User, 
-	Role, 
+	Role,
+	User,  
 	Topic, 
+	Reply,
 	)
 
 

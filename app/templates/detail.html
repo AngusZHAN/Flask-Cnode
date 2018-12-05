@@ -14,37 +14,69 @@
     <script src="/static/lib/editor/ext.js"></script>
 </head>
 <body>
-<div id="main">
-    <div id="content">
-        <div class='panel'>
-            <div class='header topic_header'>
-        <span class="topic_full_title">
-			{{ topic.title }}
-      	</span>
-                <div class="changes">
-            <span>
-                发布于 2 天前
-            </span>
-                    <span>
-                作者
-                <a href="/user/hopperhuang">hopperhuang</a>
-        	</span>
-                    <span>
-          	    {{ topic.views }} 次浏览
-        	</span>
-                    <span>
-                来自 问答
-            </span>
-                </div>
-            </div>
+    <!-- navbar -->
+    <div class='navbar'>
+        <div class='navbar-inner'>
+            <div class='container'>
+                <a class='brand' href='/'>
+                    <img src="//static2.cnodejs.org/public/images/cnodejs_light.svg" />
+                </a>
 
-            <div class='inner topic'>
-                <div class='topic_content'>
-                    <div class="markdown-text">
-                        {{ topic.content }}
+                <form id='search_form' class='navbar-search' action="/search">
+                    <input type='text' id='q' name='q' class='search-query span3' value='' />
+                </form>
+                <ul class='nav pull-right'>
+                    <li><a href='/'>首页</a></li>
+
+                    <li><a href='/'>用户</a></li>
+
+                    <li><a href="/" target="">关于</a></li>
+
+                    <li><a href="{{ url_for('auth.register') }}">注册</a></li>
+
+                    {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('auth.logout') }}">登出<span class="sr-only">(current)</span></a></li>
+                    {% else %}
+                    <li><a href="{{ url_for('auth.login') }}">登录</a></li>
+                    {% endif %}
+
+                </ul>
+                <a class="btn btn-navbar" id="responsive-sidebar-trigger">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div id="main">
+        <div id="content">
+            <div class='panel'>
+                <div class='header topic_header'>
+                    <span class="topic_full_title">
+                     {{ topic.title }}
+                    </span>
+                    <div class="changes">
+                        <span>
+                            发布于 2 天前
+                        </span>
+                        <span>
+                            作者<a href="">hopperhuang</a>
+                        </span>
+                        <span>
+                            来自 问答
+                        </span>
                     </div>
                 </div>
-            </div>
+
+                <div class='inner topic'>
+                    <div class='topic_content'>
+                        <div class="markdown-text">
+                            {{ topic.body }}
+                        </div>
+                    </div>
+                </div>
         </div>
     </div>
 
@@ -52,10 +84,10 @@
         <div class='header'>
             <span class='col_fade'>
                 <!-- 过滤器 -->
-                {{ topic.replies() | count }} 回复
+                {{ replies | count }} 回复
             </span>
         </div>
-        {% for r in topic.replies() %}
+        {% for r in replies %}
         <div class='cell reply_area reply_item'>
             <div class='author_content'>
                 <a href="/user/leiwei1991" class="user_avatar">
@@ -64,7 +96,7 @@
                 </a>
                 <div class='user_info'>
                     <a class='dark reply_author'>
-                        {{ r.user().username }}
+                        {{ r.author.username }}
                     </a>
                     <a class="reply_time">
                         {{ loop.index }}楼 • 2 天前
@@ -82,18 +114,22 @@
             </div>
             <div class='reply_content from-leiwei1991'>
                 <div class="markdown-text">
-                    {{ r.content }}
+                    {{ r.body }}
                 </div>
             </div>
         </div>
         {% endfor %}
         <div>
-            <form action="{{ url_for('') }}" method="post">
-                <input type="hidden" name="topic_id" value="{{ topic.id }}">
-                <textarea name="content"></textarea>
-                <button>添加回复</button>
-            </form>
+            <a href="{{ url_for('main.reply', topic_id=topic.id) }}" class="create_topic_btn">
+                <span class="span-success">添加回复</span>
+            </a>
         </div>
     </div>
+    <script>
+        (function() {
+            var editor = new Editor();
+            editor.render($('.editor')[0]);
+        })();
+    </script>
 </body>
 </html>

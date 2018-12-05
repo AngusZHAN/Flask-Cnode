@@ -27,9 +27,10 @@ def index():
     return render_template('index.html', topics=topics)
 
 
-@main.route('/<int:id>')
-def detail(id):
-    topic_model = Topic.id
+@main.route('/detail/<topic_id>')
+def detail(topic_id):
+    topic_model = Topic.query.filter(Topic.id == topic_id).first()
+    #replies = Reply.query.filter_by(topic_id == topic_id).all()
     return render_template('detail.html', topic=topic_model)
 
 
@@ -46,3 +47,18 @@ def publish():
         flash('发布成功')
         return redirect(url_for('.index'))
     return render_template('publish.html', form=form)
+
+
+@main.route('/reply/<topic_id>', methods=['GET','POST'])
+@login_required
+def reply(topic_id):
+    form = request.form
+    if request.method == 'POST':
+        reply = Reply(body=form.get('body'),
+                      topic_id=topic_id,
+                      author=current_user._get_current_object())
+        db.session.add(reply)
+        db.session.commit()
+        flash('回复成功')
+        return redirect(url_for('.detail', topic_id=topic_id))
+    return render_template('reply.html', form=form)
