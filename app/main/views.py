@@ -30,8 +30,8 @@ def index():
 @main.route('/detail/<topic_id>')
 def detail(topic_id):
     topic_model = Topic.query.filter(Topic.id == topic_id).first()
-    #replies = Reply.query.filter_by(topic_id == topic_id).all()
-    return render_template('detail.html', topic=topic_model)
+    replies = Reply.query.filter(topic_id == topic_id).all()
+    return render_template('detail.html', topic=topic_model, replies=replies)
 
 
 @main.route('/publish/', methods=['GET','POST'])
@@ -61,4 +61,4 @@ def reply(topic_id):
         db.session.commit()
         flash('回复成功')
         return redirect(url_for('.detail', topic_id=topic_id))
-    return render_template('reply.html', form=form)
+    return render_template('reply.html', form=form, topic_id=topic_id)
