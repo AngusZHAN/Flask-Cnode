@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>自由之翼</title>
+    <title>{% block title %}{% endblock %}自由之翼</title>
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
     <link rel="stylesheet" href="/static/css/style.css">
     <link rel="stylesheet" href="/static/lib/editor/editor.css">
@@ -13,10 +13,11 @@
     <script src="/static/lib/webuploader/webuploader.withoutimage.js"></script>
     <script src="/static/lib/editor/editor.js"></script>
     <script src="/static/lib/editor/ext.js"></script>
+    {% block head %}{% endblock %}
 </head>
 
 <body>
-    <!-- navbar -->
+    <navbar>
     <div class='navbar'>
         <div class='navbar-inner'>
             <div class='container'>
@@ -51,6 +52,8 @@
             </div>
         </div>
     </div>
+    {% block navbar %}{% endblock %}
+    </navbar>
     </div>
     <div id="main">
         <div id="sidebar">
