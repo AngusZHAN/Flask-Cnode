@@ -83,6 +83,7 @@ def edit(id):
 
 
 @main.route('/user/<username>')
+@login_required
 def user(username):
     user = User.query.filter_by(username=username).first()
     if user is None:
@@ -96,14 +97,31 @@ def user(username):
 def edit_profile():
     form = request.form
     if request.method == 'POST' and form.validate():
-        current_user.name = form.get(name)
-        current_user.location = form.get(location)
-        current_user.about_me = form.get(about_me)
+        current_user.name = form.get('name')
+        current_user.location = form.get('location')
+        current_user.about_me = form.get('about_me')
         db.session.add(current_user)
         db.session.commit()
         flash('修改资料成功')
         return redirect(url_for('.user', username=current_user.username))
-    form.name.data = current_user.name
-    form.location.data = current_user.location
-    form.about_me.data = current_user.about_me
     return render_template('edit_profile.html', form=form, user=user)
+
+
+@main.route('/up_avatar/', methods=['GET', 'POST'])
+@login_required
+def up_avatar():
+    avatar = request.files.get('file')
+    fname = avatar.filename
+    UPLOAD_FOLDER = "D:\\Code\\Flask-Cnode\\app\\static\\avatar\\"
+    ALLOWED_EXTENSIONS = ['gif', 'png', 'jpg', 'jpeg']
+    flag = '.' in fname and fname.rsplit('.', 1)[1] in ALLOWED_EXTENSIONS
+    if not flag:
+        flash('文件类型错误，请重试')
+        return redirect(url_for('.user', username=current_user.username))
+    avatar.save('{}{}_{}'.format(UPLOAD_FOLDER, current_user.username, fname))
+    current_user.i_avatar = '\\static\\avatar\\{}_{}'.format(
+                                                current_user.username, fname)
+    db.session.add(current_user)
+    db.session.commit()
+    flash('上传头像成功')
+    return redirect(url_for('.user', username=current_user.username))
