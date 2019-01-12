@@ -8,7 +8,9 @@ from app import (
 	db,
 	)
 from app.models import (
-	Role,
+	Permission,
+	Role, 
+	Follow,
 	User,  
 	Topic, 
 	Reply,
