@@ -1,6 +1,7 @@
 from . import main
 from .. import db
 from ..models import (
+    Permission,
     User,
     Topic,
     Reply,
@@ -19,6 +20,8 @@ from flask_login import (
     logout_user,
     current_user,
 )
+from ..decorators import permission_required
+
 
 @main.route('/')
 @main.route('/index/')
